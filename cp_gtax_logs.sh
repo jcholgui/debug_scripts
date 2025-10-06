@@ -1,12 +1,35 @@
 #!/bin/bash
 
-# mount_point="/root/Y/rcv_dat_logs/automated/STAX_Guadalajara_QA"
-mount_point="/root/Y/rcv_dat_logs/automated/STAX_Guadalajara_UTF"
+qa_mount_point="/root/Y/rcv_dat_logs/automated/STAX_Guadalajara_QA"
+utf_mount_point="/root/Y/rcv_dat_logs/automated/STAX_Guadalajara_UTF"
 # Files to get in the main directory
 files=("exceptions.log" "results.log" "test_env_data.json" "summary.log" "parse_summary.txt")
 # Files to get in the SN directory
 files_sn=("debug.log.gz" "debug.log" "dss_dump_end.log" "dss_dump_init.log" "drive_info.json" "da_dump_init.log" "da_dump_end.log" "drive_config.json" "drive_info.json")
 
+function display_menu_and_get_option() {
+    echo "Select instance:"
+    echo "1) STAX QA"
+    echo -e "2) STAX UTF\n"
+
+    read -p "Enter your choice: " choice
+
+    case $choice in
+        1)return 1;;
+        2)return 2;;
+        *)return 0;;
+    esac
+}
+display_menu_and_get_option
+mount_point=$?
+if [ "${mount_point}" -eq 1 ]; then
+    mount_point="${qa_mount_point}"
+elif [ "${mount_point}" -eq 2 ]; then
+    mount_point="${utf_mount_point}"
+else
+    echo "Not valid option, Exiting..."
+    exit
+fi
 
 if ! [ -d "${mount_point}" ]; then
     echo "Mount elements RCV logs first"

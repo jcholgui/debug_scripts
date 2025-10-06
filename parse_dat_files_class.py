@@ -146,7 +146,7 @@ def get_sqe_before_failed_sqe_pair(dat_entries: List[DATLine], failed_sqe_by_rul
     pair_sqe_previous_failed = []
     for dat_line in failed_sqe_by_rule:
         failed_sqe_timestamp = dat_line.timestamp
-        previous_sqe = list(filter(lambda dat_line: dat_line.timestamp <= failed_sqe_timestamp and dat_line.direction == "==>", dat_entries))
+        previous_sqe = list(filter(lambda dat_line: dat_line.timestamp < failed_sqe_timestamp and dat_line.direction == "==>", dat_entries))
         if not previous_sqe:
             continue
         sorted_previous_sqe = sorted(previous_sqe, key=lambda dat_line: dat_line.timestamp, reverse=True)
