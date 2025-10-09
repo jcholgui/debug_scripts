@@ -4,8 +4,9 @@ from typing import List, Dict, Optional
 from dataclasses import dataclass
 
 
-NUM_FAILED_SQE = 8
-NUM_SQE_BEFORE = 5
+NUM_FAILED_SQE = 5
+NUM_SQE_BEFORE = 3
+OMIT_DIR = [".vscode"]
 
 @dataclass
 class DATLine:
@@ -156,9 +157,25 @@ def get_sqe_before_failed_sqe_pair(dat_entries: List[DATLine], failed_sqe_by_rul
         pair_sqe_previous_failed.append({"failed_command": dat_line, "previous_commands": sorted_previous_sqe_n})
     return pair_sqe_previous_failed
 
+def get_directory():
+    script_directory = os.path.dirname(os.path.abspath(__file__))
+
+    # List all directories in the script's directory
+    directories = [item for item in os.listdir(script_directory) if os.path.isdir(os.path.join(script_directory, item))]
+    directories = [dir for dir in directories if dir not in OMIT_DIR]
+    directories_dict = {index: directory for index, directory in enumerate(directories, start=1)}
+
+    print("\n\tDirectories in the script's directory:")
+    for index, directory in directories_dict.items():
+        print(f"{index}) {directory}")
+    print("\n")
+    directory = int(input("Select: "))
+    directory = directories_dict.get(directory)
+
+    return directory
 
 def main():
-    directory = input("Directory: ")
+    directory = get_directory()
     rule = input("Rule: ")
     if rule == '':
         return "No rule provided"
