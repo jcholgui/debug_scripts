@@ -2,7 +2,7 @@
 */
 
 # Allow files in the root directory (optional, remove this if root files should also be ignored)
-!/*
+# !/*
 
 # Allow specific directories or files (examples below)
 # !/specific-directory/
